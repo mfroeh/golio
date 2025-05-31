@@ -17,7 +17,7 @@ const (
 	endpointLeagueRatedLattersByQueue = endpointLeagueBase + "/rated-ladders/%s/top"
 
 	endpointMatchBase      = endpointBase + "/match/v1/matches"
-	endpointMatchesByPUUID = endpointMatchBase + "/by-puuid/%s/ids"
+	endpointMatchesByPUUID = endpointMatchBase + "/by-puuid/%s/ids?start=%d&count=%d"
 	endpointMatchByMatchID = endpointMatchBase + "/%s"
 
 	endpointStatusBase         = endpointBase + "/status/v1"
