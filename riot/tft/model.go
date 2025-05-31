@@ -202,90 +202,71 @@ type TopRatedLadderEntry struct {
 }
 
 type Match struct {
-	// Match metadata
-	Metadata Metadata `json:"metadata"`
-	// Match info
-	Info MatchInfo `json:"info"`
+	Metadata MetadataDto `json:"metadata"`
+	Info     InfoDto     `json:"info"`
 }
 
-type MatchInfo struct {
-	// Unix timestamp
-	GameDatetime int64 `json:"game_datetime"`
-	// Game length in seconds
-	GameLength float64 `json:"game_length"`
-	// Game variation key. Game variations documented in TFT static data
-	GameVariation string `json:"game_variation"`
-	// Game client version
-	GameVersion  string        `json:"game_version"`
-	Participants []Participant `json:"participants"`
-	// Please refer to the League of Legends documentation
-	QueueID int64 `json:"queueId"`
-	// Teamfight Tactics set number
-	TFTSetNumber int64 `json:"tft_set_number"`
-}
-
-type Participant struct {
-	// Participant's companion
-	Companion Companion `json:"companion"`
-	// Gold left after participant was eliminated
-	GoldLeft int64 `json:"gold_left"`
-	// The round the participant was eliminated in. Note: If the player was eliminated in stage 2-1 their last_round would be 5.
-	LastRound int64 `json:"last_round"`
-	// Participant Little Legend level. Note: This is not the number of active units
-	Level int64 `json:"level"`
-	// Participant placement upon elimination
-	Placement int64 `json:"placement"`
-	// Number of players the participant eliminated.
-	PlayersEliminated int64  `json:"players_eliminated"`
-	PUUID             string `json:"puuid"`
-	// The number of seconds before the participant was eliminated
-	TimeEliminated float64 `json:"time_eliminated"`
-	// Damage the participant dealt to other players.
-	TotalDamageToPlayers int64 `json:"total_damage_to_players"`
-	// A complete list of traits for the participant's active units
-	Traits []Trait `json:"traits"`
-	// A list of active units for the participant
-	Units []Unit `json:"units"`
-}
-
-type Companion struct {
-	ContentID string `json:"content_ID"`
-	ItemID    int64  `json:"item_ID"`
-	SkinID    int64  `json:"skin_ID"`
-	Species   string `json:"species"`
-}
-
-type Trait struct {
-	// Trait name
-	Name string `json:"name"`
-	// Number of units with this trait
-	NumUnits int64 `json:"num_units"`
-	// Current style for this trait. (0 = No style, 1 = Bronze, 2 = Silver, 3 = Gold, 4 = Chromatic)
-	Style int64 `json:"style"`
-	// Current active tier for the trait
-	TierCurrent int64 `json:"tier_current"`
-	// Total tiers for the trait
-	TierTotal int64 `json:"tier_total"`
-}
-
-type Unit struct {
-	// This field was introduced in patch 9.22 with data_version 2.
-	CharacterID string `json:"character_id"`
-	// A list of the unit's items. Please refer to the Teamfight Tactics documentation for item ids.
-	Items []int `json:"itemNames"`
-	// If a unit is chosen as part of the Fates set mechanic, the chosen trait will be indicated by this field. Otherwise this field is excluded from the response.
-	Chosen string `json:"chosen"`
-	Name   string `json:"name"`
-	// Unit rarity. This doesn't equate to the unit cost.
-	Rarity int `json:"rarity"`
-	// Unit tier
-	Tier int `json:"tier"`
-}
-
-type Metadata struct {
+type MetadataDto struct {
 	DataVersion  string   `json:"data_version"`
 	MatchID      string   `json:"match_id"`
 	Participants []string `json:"participants"`
+}
+
+type InfoDto struct {
+	EndOfGameResult string           `json:"endOfGameResult"`
+	GameCreation    int64            `json:"gameCreation"`
+	GameID          int64            `json:"gameId"`
+	GameDatetime    int64            `json:"game_datetime"`
+	GameLength      float64          `json:"game_length"`
+	GameVersion     string           `json:"game_version"`
+	GameVariation   string           `json:"game_variation"`
+	MapID           int              `json:"mapId"`
+	Participants    []ParticipantDto `json:"participants"`
+	QueueID         int              `json:"queueId"`
+	TFTGameType     string           `json:"tft_game_type"`
+	TFTSetCoreName  string           `json:"tft_set_core_name"`
+	TFTSetNumber    int              `json:"tft_set_number"`
+}
+
+type ParticipantDto struct {
+	Companion            CompanionDto `json:"companion"`
+	GoldLeft             int          `json:"gold_left"`
+	LastRound            int          `json:"last_round"`
+	Level                int          `json:"level"`
+	Placement            int          `json:"placement"`
+	PlayersEliminated    int          `json:"players_eliminated"`
+	Puuid                string       `json:"puuid"`
+	RiotIDGameName       string       `json:"riotIdGameName"`
+	RiotIDTagline        string       `json:"riotIdTagline"`
+	TimeEliminated       float64      `json:"time_eliminated"`
+	TotalDamageToPlayers int          `json:"total_damage_to_players"`
+	Traits               []TraitDto   `json:"traits"`
+	Units                []UnitDto    `json:"units"`
+	Win                  bool         `json:"win"`
+}
+
+type CompanionDto struct {
+	ContentID string `json:"content_ID"`
+	ItemID    int    `json:"item_ID"`
+	SkinID    int    `json:"skin_ID"`
+	Species   string `json:"species"`
+}
+
+type TraitDto struct {
+	Name        string `json:"name"`
+	NumUnits    int    `json:"num_units"`
+	Style       int    `json:"style"`
+	TierCurrent int    `json:"tier_current"`
+	TierTotal   int    `json:"tier_total"`
+}
+
+type UnitDto struct {
+	CharacterID string   `json:"character_id"`
+	Name        string   `json:"name"`
+	Rarity      int      `json:"rarity"`
+	Tier        int      `json:"tier"`
+	ItemNames   []string `json:"itemNames"` // Adapted: JSON contains "itemNames" instead of "items"
+	Chosen      string   `json:"chosen,omitempty"`
 }
 
 type PlatformData struct {
