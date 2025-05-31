@@ -41,13 +41,14 @@ func (f *MatchListFilter) buildParams() string {
 // GetMatchesByPUUID returns a list of match ids by PUUID
 func (mc *MatchClient) GetMatchesByPUUID(puuid string, start, count int, filters ...*MatchListFilter) ([]string, error) {
 	logger := mc.logger().WithField("method", "GetMatchesByPUUID")
-	mc.c.Region = api.Region(api.RegionToRoute[mc.c.Region])
+	c := *mc.c
+	c.Region = api.Region(api.RegionToRoute[c.Region]) // TFT-MATCH-V1 uses a route instead of a region
 	url := fmt.Sprintf(endpointMatchesByPUUID, puuid, start, count)
 	for _, f := range filters {
 		url += f.buildParams()
 	}
 	var out []string
-	if err := mc.c.GetInto(url, &out); err != nil {
+	if err := c.GetInto(url, &out); err != nil {
 		logger.Debug(err)
 		return nil, err
 	}
@@ -57,10 +58,11 @@ func (mc *MatchClient) GetMatchesByPUUID(puuid string, start, count int, filters
 // GetMatchByMatchID returns a match by matchID
 func (mc *MatchClient) GetMatchByMatchID(matchId string) (*Match, error) {
 	logger := mc.logger().WithField("method", "GetMatchByMatchID")
-	mc.c.Region = api.Region(api.RegionToRoute[mc.c.Region])
+	c := *mc.c
+	c.Region = api.Region(api.RegionToRoute[c.Region]) // TFT-MATCH-V1 uses a route instead of a region
 	url := fmt.Sprintf(endpointMatchByMatchID, matchId)
 	var out *Match
-	if err := mc.c.GetInto(url, &out); err != nil {
+	if err := c.GetInto(url, &out); err != nil {
 		logger.Debug(err)
 		return nil, err
 	}
